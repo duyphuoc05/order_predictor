@@ -9,7 +9,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.metrics import mean_squared_error, r2_score
 
-# Cấu hình giao diện Streamlit
+# Cấu hình layout Streamlit
 st.set_page_config(page_title="Order Analytics", layout="wide")
 st.title("📦 Order Analytics & Revenue Forecast")
 
@@ -43,9 +43,10 @@ df["Product"] = df["Product"].str.lower()
 # 4. Reset index
 df = df.reset_index(drop=True)
 
-# ✅ Đây là dòng bị lỗi trước đó (st.su...) đã được sửa:
+# ✔️ Dòng lỗi đã được sửa
 st.success("✔️ Hoàn tất tiền xử lý")
 
+# Xem dữ liệu
 st.dataframe(df.head())
 
 # ---------------------- Trực quan hoá ----------------------
@@ -85,4 +86,22 @@ pipeline = Pipeline([
     ("regressor", LinearRegression())
 ])
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=
+# ✅ Dòng lỗi đã được sửa hoàn chỉnh
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+pipeline.fit(X_train, y_train)
+y_pred = pipeline.predict(X_test)
+
+st.metric("📉 MSE", f"{mean_squared_error(y_test, y_pred):.2f}")
+st.metric("📈 R-squared", f"{r2_score(y_test, y_pred):.2f}")
+
+# ---------------------- Mã nguồn ----------------------
+with st.expander("📜 Xem mã nguồn"):
+    try:
+        with open(__file__, "r", encoding="utf-8") as f:
+            code = f.read()
+        st.code(code, language="python")
+    except:
+        st.info("Không thể hiển thị mã nguồn khi chạy trên nền tảng cloud.")
