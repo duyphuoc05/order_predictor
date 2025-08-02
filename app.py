@@ -1,3 +1,4 @@
+```python
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -12,20 +13,24 @@ import warnings
 warnings.filterwarnings('ignore')
 
 # Thiết lập tiêu đề và mô tả
-st.title("Phân tích Dữ liệu Bán hàng theo P6")
+st.title("Phân tích Dữ liệu Bán hàng")
 st.write("""
 Ứng dụng này phân tích dữ liệu bán hàng theo mô hình P6 (Product, Price, Place, Promotion, People, Process).
 Dữ liệu từ file `orders_sample_with_stock.csv` được sử dụng để phân tích sản phẩm, giá cả, tồn kho, 
 xu hướng doanh thu, và dự đoán số lượng bán ra bằng mô hình Random Forest.
 """)
 
-# Tải dữ liệu từ URL GitHub hoặc file cục bộ
+# Tải dữ liệu
 try:
+    # Thay <your-username> và <your-repo> bằng thông tin GitHub của bạn
     data_url = "https://raw.githubusercontent.com/<your-username>/<your-repo>/main/orders_sample_with_stock.csv"
     data = pd.read_csv(data_url)
 except:
-    st.error("Không thể tải dữ liệu. Vui lòng kiểm tra file `orders_sample_with_stock.csv` hoặc URL GitHub.")
-    st.stop()
+    try:
+        data = pd.read_csv('orders_sample_with_stock.csv')
+    except FileNotFoundError:
+        st.error("Không thể tải dữ liệu. Vui lòng kiểm tra file `orders_sample_with_stock.csv` hoặc URL GitHub.")
+        st.stop()
 
 # Tiền xử lý dữ liệu
 data['Date'] = pd.to_datetime(data['Date'], format='%m/%d/%Y')
@@ -149,3 +154,4 @@ st.write("""
 - **Promotion**: Khuyến mãi vào các ngày thấp điểm.
 - **People & Process**: Cải thiện mô hình dự báo bằng cách thêm đặc trưng.
 """)
+```
