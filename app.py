@@ -9,7 +9,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.metrics import mean_squared_error, r2_score
 
-# Cấu hình giao diện
+# Cấu hình layout
 st.set_page_config(page_title="Order Analytics", layout="wide")
 st.title("📦 Order Analytics & Revenue Forecast")
 
@@ -26,25 +26,21 @@ df = load_data()
 # ---------------------- Tiền xử lý ----------------------
 st.header("🧼 Tiền xử lý dữ liệu")
 
-# Xóa null
-st.markdown("**1. Xóa giá trị null**")
+# 1. Xoá null
+st.markdown("**1. Xoá giá trị Null**")
 df = df.dropna()
 
-# Xoá trùng
+# 2. Xoá dòng trùng lặp
 st.markdown("**2. Xoá dòng trùng lặp**")
 duplicates = df.duplicated().sum()
 df = df.drop_duplicates()
 st.write(f"✅ Đã xoá `{duplicates}` dòng trùng lặp")
 
-# Chuẩn hóa chữ thường
-st.markdown("**3. Chuẩn hóa tên sản phẩm**")
+# 3. Chuẩn hóa tên sản phẩm
+st.markdown("**3. Chuẩn hóa tên sản phẩm (chữ thường)**")
 df["Product"] = df["Product"].str.lower()
 
-# Reset index
+# 4. Reset index
 df = df.reset_index(drop=True)
 
-st.success("✔️ Hoàn tất tiền xử lý")
-st.dataframe(df.head())
-
-# ---------------------- Trực quan hóa ----------------------
-st.
+st.su
