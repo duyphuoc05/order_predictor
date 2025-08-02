@@ -37,6 +37,22 @@ data['Date'] = pd.to_datetime(data['Date'], format='%m/%d/%Y')
 data['Total Revenue'] = data['Quantity'] * data['Price']
 data['Month'] = data['Date'].dt.strftime('%B')
 
+# Bảng số liệu tổng hợp
+st.header("Bảng số liệu tổng hợp")
+summary_data = data.groupby('Product').agg({
+    'Total Revenue': 'sum',
+    'Quantity': 'sum',
+    'Price': 'mean',
+    'Stock': 'mean'
+}).round(2).sort_values(by='Total Revenue', ascending=False).head(5)
+summary_data = summary_data.rename(columns={
+    'Total Revenue': 'Tổng Doanh thu',
+    'Quantity': 'Tổng Số lượng',
+    'Price': 'Giá trung bình',
+    'Stock': 'Tồn kho trung bình'
+})
+st.table(summary_data)
+
 # --- Product ---
 st.header("1. Product (Sản phẩm)")
 st.write("Phân tích sản phẩm bán chạy nhất dựa trên doanh thu và số lượng bán ra.")
