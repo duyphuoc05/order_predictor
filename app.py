@@ -114,6 +114,8 @@ revenue_by_product = data.groupby('Product')['Total Revenue'].sum().sort_values(
 fig, ax = plt.subplots(figsize=(8, 5))
 sns.barplot(x=revenue_by_product.index, y=revenue_by_product.values, palette='Blues_d', ax=ax)
 ax.set_title('Top 5 Sản phẩm theo Doanh thu')
+ax.set_xlabel('Sản phẩm')
+ax.set_ylabel('Doanh thu')
 plt.xticks(rotation=45)
 plt.tight_layout()
 
@@ -192,4 +194,87 @@ fig, ax = plt.subplots(figsize=(10, 6))
 ax.plot(revenue_by_date['Date'], revenue_by_date['Total Revenue'], marker='o', color='b')
 ax.set_title('Doanh thu theo ngày')
 ax.set_xlabel('Ngày')
-ax.set
+ax.set_ylabel('Doanh thu')
+plt.xticks(rotation=45)
+plt.tight_layout()
+""", language="python")
+
+# --- People & Process ---
+st.header("5. People & Process (Con người & Quy trình)")
+st.write("Dự đoán số lượng bán ra bằng mô hình Random Forest.")
+X = data[['Price', 'Stock', 'Product', 'Month']]
+y = data['Quantity']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+preprocessor = ColumnTransformer(
+    transformers=[
+        ('num', StandardScaler(), ['Price', 'Stock']),
+        ('cat', OneHotEncoder(drop='first', handle_unknown='ignore'), ['Product', 'Month'])
+    ]
+)
+
+model = Pipeline([
+    ('preprocessor', preprocessor),
+    ('regressor', RandomForestRegressor(n_estimators=100, random_state=42))
+])
+
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+mse = mean_squared_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
+
+st.write(f"**Kết quả mô hình Random Forest**:")
+st.write(f"- Mean Squared Error (MSE): {mse:.2f}")
+st.write(f"- R² Score: {r2:.2f}")
+st.write("**Nhận xét**: Mô hình có thể cải thiện bằng cách thêm đặc trưng hoặc thử mô hình khác.")
+
+# Biểu đồ so sánh thực tế và dự đoán
+fig, ax = plt.subplots(figsize=(10, 6))
+ax.scatter(range(len(y_test)), y_test, color='blue', label='Thực tế', alpha=0.6)
+ax.scatter(range(len(y_pred)), y_pred, color='red', label='Dự đoán', alpha=0.6)
+ax.set_title('So sánh Quantity thực tế và dự đoán')
+ax.set_xlabel('Mẫu')
+ax.set_ylabel('Số lượng')
+ax.legend()
+plt.tight_layout()
+st.pyplot(fig)
+st.code("""
+# Code để huấn luyện mô hình và tạo biểu đồ scatter cho People & Process
+X = data[['Price', 'Stock', 'Product', 'Month']]
+y = data['Quantity']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+preprocessor = ColumnTransformer([
+    ('num', StandardScaler(), ['Price', 'Stock']),
+    ('cat', OneHotEncoder(drop='first', handle_unknown='ignore'), ['Product', 'Month'])
+])
+
+model = Pipeline([
+    ('preprocessor', preprocessor),
+    ('regressor', RandomForestRegressor(n_estimators=100, random_state=42))
+])
+
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+mse = mean_squared_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
+
+fig, ax = plt.subplots(figsize=(10, 6))
+ax.scatter(range(len(y_test)), y_test, color='blue', label='Thực tế', alpha=0.6)
+ax.scatter(range(len(y_pred)), y_pred, color='red', label='Dự đoán', alpha=0.6)
+ax.set_title('So sánh Quantity thực tế và dự đoán')
+ax.set_xlabel('Mẫu')
+ax.set_ylabel('Số lượng')
+ax.legend()
+plt.tight_layout()
+""", language="python")
+
+# Kết luận
+st.header("Kết luận và Đề xuất")
+st.write("""
+- **Product**: Tập trung vào Monitor và Mouse.
+- **Price**: Kiểm tra biến động giá lớn (Power Bank).
+- **Place**: Đảm bảo tồn kho cho Graphics Card.
+- **Promotion**: Khuyến mãi vào các ngày thấp điểm.
+- **People & Process**: Cải thiện mô hình dự báo bằng cách thêm đặc trưng.
+""")
