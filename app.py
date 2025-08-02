@@ -65,6 +65,9 @@ summary_data = summary_data.rename(columns={
     'Stock': 'Tồn kho trung bình'
 })
 st.table(summary_data)
+# Hiển thị đoạn code nhỏ của summary_data
+summary_sample = summary_data.head(5).to_string(index=True)  # Lấy 5 hàng đầu tiên của summary_data
+st.code(summary_sample, language="text")
 st.code("""
 Bảng số liệu tổng hợp cung cấp thông tin quan trọng về doanh thu, số lượng bán ra, giá trung bình, và tồn kho trung bình của các sản phẩm hàng đầu.
 Dữ liệu này giúp doanh nghiệp xác định sản phẩm chủ lực, đánh giá hiệu quả định giá, và quản lý nguồn cung hiệu quả.
@@ -153,7 +156,7 @@ st.pyplot(fig)
 st.write("**Nhận xét**: Đề xuất khuyến mãi vào các ngày thấp điểm.")
 st.code("""
 Phân tích xúc tiến cho thấy doanh thu dao động, với các ngày thấp điểm gần đây (như cuối tháng 6) và cao điểm (như 7/4/2024). 
-Tính đến 08:24 PM ngày 02/08/2025, doanh nghiệp nên triển khai khuyến mãi ngay trong tuần tới để kích cầu trước khi kết thúc tháng.
+Tính đến 08:25 PM ngày 02/08/2025, doanh nghiệp nên triển khai khuyến mãi ngay trong tuần tới để kích cầu trước khi kết thúc tháng.
 """, language="text")
 
 # --- People & Process ---
