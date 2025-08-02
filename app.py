@@ -139,8 +139,8 @@ plt.tight_layout()
 st.pyplot(fig)
 st.write("**Nhận xét**: Đề xuất khuyến mãi vào các ngày thấp điểm.")
 st.write("""
-Phân tích xúc tiến cho thấy doanh thu dao động, với các ngày cao điểm (như 7/4/2024) và thấp điểm (như cuối tháng 6). 
-Doanh nghiệp nên triển khai khuyến mãi vào các ngày thấp điểm để kích cầu, đồng thời duy trì chiến lược cho các ngày cao điểm.
+Phân tích xúc tiến cho thấy doanh thu dao động, với các ngày thấp điểm gần đây (như cuối tháng 6) và cao điểm (như 7/4/2024). 
+Tính đến 08:13 PM ngày 02/08/2025, doanh nghiệp nên triển khai khuyến mãi ngay trong tuần tới để kích cầu trước khi kết thúc tháng.
 """)
 
 # --- People & Process ---
