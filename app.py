@@ -33,9 +33,17 @@ except:
         st.stop()
 
 # Tiền xử lý dữ liệu
+# Xóa 1 null (nếu có), xóa duplicate, và chuẩn hóa dữ liệu
+data = data.dropna().head(len(data) - 1)  # Xóa 1 hàng null (giả định xóa hàng cuối nếu có null)
+data = data.drop_duplicates()  # Xóa các hàng trùng lặp
 data['Date'] = pd.to_datetime(data['Date'], format='%m/%d/%Y')
 data['Total Revenue'] = data['Quantity'] * data['Price']
 data['Month'] = data['Date'].dt.strftime('%B')
+
+# Chuẩn hóa các cột số (Price, Stock, Quantity)
+scaler = StandardScaler()
+numeric_columns = ['Price', 'Stock', 'Quantity']
+data[numeric_columns] = scaler.fit_transform(data[numeric_columns])
 
 # Bảng số liệu tổng hợp
 st.header("Bảng số liệu tổng hợp")
@@ -140,7 +148,7 @@ st.pyplot(fig)
 st.write("**Nhận xét**: Đề xuất khuyến mãi vào các ngày thấp điểm.")
 st.code("""
 Phân tích xúc tiến cho thấy doanh thu dao động, với các ngày thấp điểm gần đây (như cuối tháng 6) và cao điểm (như 7/4/2024). 
-Tính đến 08:17 PM ngày 02/08/2025, doanh nghiệp nên triển khai khuyến mãi ngay trong tuần tới để kích cầu trước khi kết thúc tháng.
+Tính đến 08:20 PM ngày 02/08/2025, doanh nghiệp nên triển khai khuyến mãi ngay trong tuần tới để kích cầu trước khi kết thúc tháng.
 """, language="text")
 
 # --- People & Process ---
