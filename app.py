@@ -12,6 +12,14 @@ from sklearn.metrics import mean_squared_error, r2_score
 st.set_page_config(page_title="Order Analytics", layout="wide")
 st.title("📦 Order Analytics & Revenue Forecast")
 
+  st.code("""
+  def load_data():
+    df = pd.read_csv("orders_sample_with_stock.csv")
+    df["Date"] = pd.to_datetime(df["Date"], format="%m/%d/%Y")
+    df["Total"] = df["Quantity"] * df["Price"]
+    return df
+  """, language="python")
+
 # Load data
 @st.cache
 def load_data():
