@@ -52,10 +52,10 @@ summary_data = summary_data.rename(columns={
     'Stock': 'Tồn kho trung bình'
 })
 st.table(summary_data)
-st.write("""
+st.code("""
 Bảng số liệu tổng hợp cung cấp thông tin quan trọng về doanh thu, số lượng bán ra, giá trung bình, và tồn kho trung bình của các sản phẩm hàng đầu.
 Dữ liệu này giúp doanh nghiệp xác định sản phẩm chủ lực, đánh giá hiệu quả định giá, và quản lý nguồn cung hiệu quả.
-""")
+""", language="text")
 
 # --- Product ---
 st.header("1. Product (Sản phẩm)")
@@ -84,10 +84,10 @@ with col2:
     plt.tight_layout()
     st.pyplot(fig)
     st.write(f"**Nhận xét**: Monitor và Mouse chiếm tỷ lệ lớn.")
-st.write("""
+st.code("""
 Phân tích sản phẩm cho thấy Monitor và Mouse là các sản phẩm chủ lực, chiếm tỷ lệ lớn trong doanh thu và số lượng bán ra. 
 Doanh nghiệp nên tập trung quảng bá và đảm bảo nguồn cung cho các sản phẩm này, đồng thời xem xét mở rộng danh mục nếu có nhu cầu cao.
-""")
+""", language="text")
 
 # --- Price ---
 st.header("2. Price (Giá cả)")
@@ -101,11 +101,11 @@ plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
 plt.tight_layout()
 st.pyplot(fig)
 st.write("**Nhận xét**: Giá dao động lớn, không có mối quan hệ tuyến tính rõ ràng với số lượng.")
-st.write("""
+st.code("""
 Phân tích giá cả chỉ ra rằng biến động giá lớn (như Power Bank) có thể ảnh hưởng đến nhu cầu. 
 Doanh nghiệp nên xem xét điều chỉnh chiến lược định giá, chẳng hạn giảm giá cho sản phẩm có giá cao nhưng bán chậm, 
 hoặc duy trì giá ổn định cho sản phẩm chủ lực như Monitor.
-""")
+""", language="text")
 
 # --- Place ---
 st.header("3. Place (Phân phối)")
@@ -120,10 +120,10 @@ plt.xticks(rotation=45)
 plt.tight_layout()
 st.pyplot(fig)
 st.write(f"**Nhận xét**: Laptop và Router có tồn kho cao ({stock_by_product.iloc[0]:.2f}).")
-st.write("""
+st.code("""
 Phân tích phân phối cho thấy Laptop và Router có tồn kho dồi dào, nhưng một số sản phẩm như Graphics Card có nguy cơ hết hàng. 
 Doanh nghiệp cần theo dõi sát sao tồn kho và bổ sung kịp thời cho các sản phẩm bán chạy để tránh gián đoạn cung ứng.
-""")
+""", language="text")
 
 # --- Promotion ---
 st.header("4. Promotion (Xúc tiến)")
@@ -138,10 +138,10 @@ plt.xticks(rotation=45)
 plt.tight_layout()
 st.pyplot(fig)
 st.write("**Nhận xét**: Đề xuất khuyến mãi vào các ngày thấp điểm.")
-st.write("""
+st.code("""
 Phân tích xúc tiến cho thấy doanh thu dao động, với các ngày thấp điểm gần đây (như cuối tháng 6) và cao điểm (như 7/4/2024). 
-Tính đến 08:13 PM ngày 02/08/2025, doanh nghiệp nên triển khai khuyến mãi ngay trong tuần tới để kích cầu trước khi kết thúc tháng.
-""")
+Tính đến 08:17 PM ngày 02/08/2025, doanh nghiệp nên triển khai khuyến mãi ngay trong tuần tới để kích cầu trước khi kết thúc tháng.
+""", language="text")
 
 # --- People & Process ---
 st.header("5. People & Process (Con người & Quy trình)")
@@ -181,10 +181,10 @@ ax.set_ylabel('Số lượng')
 ax.legend()
 plt.tight_layout()
 st.pyplot(fig)
-st.write("""
+st.code("""
 Phân tích con người và quy trình cho thấy mô hình Random Forest dự đoán số lượng bán ra với độ chính xác trung bình (R² ≈ 0.3-0.5). 
 Mô hình này hỗ trợ quản lý tồn kho bằng cách dự đoán nhu cầu, nhưng cần cải thiện bằng cách thêm đặc trưng (như ngày trong tuần) hoặc thử các mô hình khác như XGBoost.
-""")
+""", language="text")
 
 # Kết luận
 st.header("Kết luận và Đề xuất")
