@@ -9,12 +9,12 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.metrics import mean_squared_error, r2_score
 
-# Cấu hình layout
+# Cấu hình giao diện Streamlit
 st.set_page_config(page_title="Order Analytics", layout="wide")
 st.title("📦 Order Analytics & Revenue Forecast")
 
 # ---------------------- Load dữ liệu ----------------------
-@st.cache
+@st.cache_data
 def load_data():
     df = pd.read_csv("orders_sample_with_stock.csv")
     df["Date"] = pd.to_datetime(df["Date"], format="%m/%d/%Y")
@@ -43,4 +43,46 @@ df["Product"] = df["Product"].str.lower()
 # 4. Reset index
 df = df.reset_index(drop=True)
 
-st.su
+# ✅ Đây là dòng bị lỗi trước đó (st.su...) đã được sửa:
+st.success("✔️ Hoàn tất tiền xử lý")
+
+st.dataframe(df.head())
+
+# ---------------------- Trực quan hoá ----------------------
+st.header("📊 Phân tích dữ liệu")
+
+st.subheader("1️⃣ Đơn hàng theo ngày")
+st.line_chart(df["Date"].value_counts().sort_index())
+
+st.subheader("2️⃣ Doanh thu theo sản phẩm")
+st.bar_chart(df.groupby("Product")["Total"].sum().sort_values())
+
+st.subheader("3️⃣ Tồn kho trung bình theo sản phẩm")
+st.bar_chart(df.groupby("Product")["Stock"].mean().sort_values())
+
+st.subheader("4️⃣ Phân bố giá bán")
+fig1, ax1 = plt.subplots()
+sns.histplot(df["Price"], bins=20, kde=True, ax=ax1)
+st.pyplot(fig1)
+
+st.subheader("5️⃣ Quantity vs Total")
+fig2, ax2 = plt.subplots()
+sns.scatterplot(data=df, x="Quantity", y="Total", hue="Product", ax=ax2)
+st.pyplot(fig2)
+
+# ---------------------- Dự đoán ----------------------
+st.header("🤖 Dự đoán tổng tiền (Linear Regression)")
+
+X = df[["Quantity", "Price", "Product"]]
+y = df["Total"]
+
+preprocessor = ColumnTransformer([
+    ("cat", OneHotEncoder(handle_unknown="ignore"), ["Product"])
+], remainder="passthrough")
+
+pipeline = Pipeline([
+    ("preprocessor", preprocessor),
+    ("regressor", LinearRegression())
+])
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=
