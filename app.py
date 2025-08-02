@@ -19,9 +19,6 @@ st.write("""
 Dữ liệu từ file `orders_sample_with_stock.csv` được sử dụng để phân tích sản phẩm, giá cả, tồn kho, 
 xu hướng doanh thu, và dự đoán số lượng bán ra bằng mô hình Random Forest.
 """)
-# Hiển thị đoạn code nhỏ của bảng dữ liệu
-sample_data = data.head(5).to_string(index=False)  # Lấy 5 hàng đầu tiên và chuyển thành chuỗi
-st.code(sample_data, language="text")
 
 # Tải dữ liệu
 try:
@@ -35,18 +32,23 @@ except:
         st.error("Không thể tải dữ liệu. Vui lòng kiểm tra file `orders_sample_with_stock.csv` hoặc URL GitHub.")
         st.stop()
 
+# Hiển thị đoạn code nhỏ của bảng dữ liệu (sau khi tải)
+sample_data = data.head(5).to_string(index=False)  # Lấy 5 hàng đầu tiên
+st.code(sample_data, language="text")
+
 # Tiền xử lý dữ liệu
 # Xóa 1 null (nếu có), xóa duplicate, và chuẩn hóa dữ liệu
-data = data.dropna().head(len(data) - 1)  # Xóa 1 hàng null (giả định xóa hàng cuối nếu có null)
+if data.isnull().sum().sum() > 0:
+    data = data.dropna().head(len(data) - 1)  # Xóa 1 hàng null nếu có
 data = data.drop_duplicates()  # Xóa các hàng trùng lặp
 data['Date'] = pd.to_datetime(data['Date'], format='%m/%d/%Y')
 data['Total Revenue'] = data['Quantity'] * data['Price']
 data['Month'] = data['Date'].dt.strftime('%B')
 
-# Chuẩn hóa các cột số (Price, Stock, Quantity)
+# Chuẩn hóa các cột số (Price, Quantity) nhưng giữ Stock gốc cho phân tích
 scaler = StandardScaler()
-numeric_columns = ['Price', 'Stock', 'Quantity']
-data[numeric_columns] = scaler.fit_transform(data[numeric_columns])
+numeric_columns = ['Price', 'Quantity']
+data[numeric_columns] = scaler.fit_transform(data[numeric_columns])  # Chỉ chuẩn hóa Price và Quantity
 
 # Bảng số liệu tổng hợp
 st.header("Bảng số liệu tổng hợp")
@@ -54,7 +56,7 @@ summary_data = data.groupby('Product').agg({
     'Total Revenue': 'sum',
     'Quantity': 'sum',
     'Price': 'mean',
-    'Stock': 'Stock'
+    'Stock': 'mean'  # Sử dụng Stock gốc thay vì giá trị chuẩn hóa
 }).round(2).sort_values(by='Total Revenue', ascending=False).head(5)
 summary_data = summary_data.rename(columns={
     'Total Revenue': 'Tổng Doanh thu',
@@ -151,7 +153,7 @@ st.pyplot(fig)
 st.write("**Nhận xét**: Đề xuất khuyến mãi vào các ngày thấp điểm.")
 st.code("""
 Phân tích xúc tiến cho thấy doanh thu dao động, với các ngày thấp điểm gần đây (như cuối tháng 6) và cao điểm (như 7/4/2024). 
-Tính đến 08:22 PM ngày 02/08/2025, doanh nghiệp nên triển khai khuyến mãi ngay trong tuần tới để kích cầu trước khi kết thúc tháng.
+Tính đến 08:24 PM ngày 02/08/2025, doanh nghiệp nên triển khai khuyến mãi ngay trong tuần tới để kích cầu trước khi kết thúc tháng.
 """, language="text")
 
 # --- People & Process ---
