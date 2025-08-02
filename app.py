@@ -19,6 +19,9 @@ st.write("""
 Dữ liệu từ file `orders_sample_with_stock.csv` được sử dụng để phân tích sản phẩm, giá cả, tồn kho, 
 xu hướng doanh thu, và dự đoán số lượng bán ra bằng mô hình Random Forest.
 """)
+# Hiển thị đoạn code nhỏ của bảng dữ liệu
+sample_data = data.head(5).to_string(index=False)  # Lấy 5 hàng đầu tiên và chuyển thành chuỗi
+st.code(sample_data, language="text")
 
 # Tải dữ liệu
 try:
@@ -51,7 +54,7 @@ summary_data = data.groupby('Product').agg({
     'Total Revenue': 'sum',
     'Quantity': 'sum',
     'Price': 'mean',
-    'Stock': 'mean'
+    'Stock': 'Stock'
 }).round(2).sort_values(by='Total Revenue', ascending=False).head(5)
 summary_data = summary_data.rename(columns={
     'Total Revenue': 'Tổng Doanh thu',
@@ -148,7 +151,7 @@ st.pyplot(fig)
 st.write("**Nhận xét**: Đề xuất khuyến mãi vào các ngày thấp điểm.")
 st.code("""
 Phân tích xúc tiến cho thấy doanh thu dao động, với các ngày thấp điểm gần đây (như cuối tháng 6) và cao điểm (như 7/4/2024). 
-Tính đến 08:20 PM ngày 02/08/2025, doanh nghiệp nên triển khai khuyến mãi ngay trong tuần tới để kích cầu trước khi kết thúc tháng.
+Tính đến 08:22 PM ngày 02/08/2025, doanh nghiệp nên triển khai khuyến mãi ngay trong tuần tới để kích cầu trước khi kết thúc tháng.
 """, language="text")
 
 # --- People & Process ---
